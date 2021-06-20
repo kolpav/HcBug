@@ -12,15 +12,16 @@ jobs:
 
       - name: Sleep
         run: |
-          sleep 30s
+          sleep 15s
 
       - name: Request
         run: |
           curl 'http://localhost:5000/graphql' \
             -X POST \
             -H 'content-type: application/json' \
-            --connect-timeout 30 \
-            --retry 10 \
+            --verbose \
+            --connect-timeout 10 \
+            --retry 5 \
             --retry-delay 5 \
             --data '{
               "query": "{ __typename }"
