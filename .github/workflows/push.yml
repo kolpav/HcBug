@@ -10,15 +10,14 @@ jobs:
         run: |
           docker-compose up --build -d
 
-      - name: Wait for application to start
-        run: |
-          timeout 60 bash -c 'while [[ "$(curl --insecure -s -o /dev/null -w ''%{http_code}'' http://localhost:5000)" != "200" ]]; do sleep 5; done'
-
       - name: Request
         run: |
           curl 'http://localhost:5000/graphql' \
             -X POST \
             -H 'content-type: application/json' \
+            --connect-timeout 30 \
+            --retry 10 \
+            --retry-delay 5 \
             --data '{
               "query": "{ __typename }"
             }'
